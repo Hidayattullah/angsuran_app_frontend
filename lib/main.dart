@@ -1,8 +1,9 @@
+import 'package:angsuran_frontend/routes.dart';
 import 'package:flutter/material.dart';
-import 'presentations/pages/home_page.dart'; // Import file home_page.dart
+import 'package:get/get.dart';
 
 void main() {
-  WidgetsFlutterBinding.ensureInitialized(); // Tambahkan ini untuk memastikan semuanya diinisialisasi dengan benar
+  WidgetsFlutterBinding.ensureInitialized(); 
   runApp(const MyApp());
 }
 
@@ -11,14 +12,15 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Angsuran Kalkulator',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const MyHomePage(title: 'Angsuran Kalkulator'), // Gunakan MyHomePage dari home_page.dart
+      initialRoute: AppRoutes.contract, // Set your initial route here
+      getPages: AppRoutes.routes,
     );
   }
 }

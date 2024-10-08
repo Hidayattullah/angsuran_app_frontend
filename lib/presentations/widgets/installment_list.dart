@@ -8,20 +8,22 @@ class InstallmentList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+
     return ListView.builder(
       itemCount: installments.length,
       itemBuilder: (context, index) {
         final installment = installments[index];
         return Card(
-          margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+          margin: EdgeInsets.symmetric(vertical: 10, horizontal: screenWidth * 0.04),
           child: Padding(
-            padding: const EdgeInsets.all(16.0),
+            padding: EdgeInsets.all(screenWidth * 0.04), // Responsif padding
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   'Installment No: ${installment.installmentNo}',
-                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: screenWidth * 0.045),
                 ),
                 const SizedBox(height: 8),
                 Text('Amount Per Month: \$${installment.amountPerMonth}'),

@@ -1,5 +1,4 @@
 import 'package:get/get.dart';
-
 import '../../datas/models/penalty_model.dart';
 import '../../domain/usescases/penalty/get_penalty.dart';
 
@@ -23,22 +22,28 @@ class PenaltyController extends GetxController {
   }
 
   Future<void> fetchPenalties() async {
+    isLoading(true); // Start loading
     try {
-      isLoading(true);
       final result = await getPenaltiesUseCase();
       penalties.assignAll(result);
+    } catch (e) {
+      // Handle error
+      Get.snackbar('Error', 'Failed to load penalties');
     } finally {
-      isLoading(false);
+      isLoading(false); // Stop loading
     }
   }
 
   Future<void> fetchPenaltyById(int id) async {
+    isLoading(true); // Start loading
     try {
-      isLoading(true);
       final result = await getPenaltyByIdUseCase(id);
       selectedPenalty.value = result;
+    } catch (e) {
+      // Handle error
+      Get.snackbar('Error', 'Failed to load penalty');
     } finally {
-      isLoading(false);
+      isLoading(false); // Stop loading
     }
   }
 }

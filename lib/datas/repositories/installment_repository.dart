@@ -11,7 +11,7 @@ class InstallmentRepository {
   }
 
   Future<Installment> getInstallment(int id) {
-    return _installmentProvider.getInstallmentById(id);
+    return _installmentProvider.getInstallmentById(id); // Fetch installment by ID
   }
 
   // Fungsi untuk membuat installment
@@ -25,6 +25,6 @@ class InstallmentRepository {
   }
 
   Future<void> deleteInstallment(int id) {
-  return _installmentProvider.deleteInstallment(id);
-}
+    return _installmentProvider.deleteInstallment(id);
+  }
 }

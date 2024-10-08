@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:angsuran_frontend/presentations/pages/contract_page.dart';
-import 'package:angsuran_frontend/presentations/pages/installment_page.dart';
-import 'package:angsuran_frontend/presentations/pages/penalty_page.dart';
+import 'package:get/get.dart';
+import '../../routes.dart';
 
 class CustomBottomNavigationBar extends StatelessWidget {
   final int currentIndex;
@@ -35,22 +34,13 @@ class CustomBottomNavigationBar extends StatelessWidget {
         onTap(index);
         switch (index) {
           case 0:
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (context) => const ContractPage()),
-            );
+            Get.offNamed(AppRoutes.contract); // Navigate to Contract Page
             break;
           case 1:
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (context) => const PenaltyPage()),
-            );
+            Get.offNamed(AppRoutes.penalty); // Navigate to Penalty Page
             break;
           case 2:
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (context) => const InstallmentPage()),
-            );
+            Get.offNamed(AppRoutes.installment); // Navigate to Installment Page
             break;
         }
       },

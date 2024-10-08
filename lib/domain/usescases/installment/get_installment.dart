@@ -14,11 +14,11 @@ class GetInstallments {
 }
 
 class GetInstallmentById {
-  final InstallmentRepository _repository;
+  final InstallmentRepository _installmentRepository;
 
-  GetInstallmentById(this._repository);
+  GetInstallmentById(this._installmentRepository);
 
-  Future<Installment> call(int id) async {
-    return await _repository.getInstallment(id);
+  Future<Installment> call(int id) {
+    return _installmentRepository.getInstallment(id); // Call the repository method
   }
 }

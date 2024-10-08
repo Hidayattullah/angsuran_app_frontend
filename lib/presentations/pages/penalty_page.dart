@@ -35,23 +35,30 @@ class _PenaltyPageState extends State<PenaltyPage> {
       appBar: AppBar(
         title: const Text('Penalties'),
       ),
-      body: Obx(() {
-        if (penaltyController.isLoading.value) {
-          return const Center(child: CircularProgressIndicator());
-        }
+      body: FutureBuilder(
+        future: penaltyController.fetchPenalties(), // Method to fetch data
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
 
-        if (penaltyController.penalties.isEmpty) {
-          return const Center(child: Text('No penalties available'));
-        }
+          if (snapshot.hasError) {
+            return const Center(child: Text('Error fetching penalties'));
+          }
 
-        return ListView.builder(
-          itemCount: penaltyController.penalties.length,
-          itemBuilder: (context, index) {
-            final penalty = penaltyController.penalties[index];
-            return PenaltyCard(penalty: penalty);
-          },
-        );
-      }),
+          if (penaltyController.penalties.isEmpty) {
+            return const Center(child: Text('No penalties available'));
+          }
+
+          return ListView.builder(
+            itemCount: penaltyController.penalties.length,
+            itemBuilder: (context, index) {
+              final penalty = penaltyController.penalties[index];
+              return PenaltyCard(penalty: penalty);
+            },
+          );
+        },
+      ),
       bottomNavigationBar: CustomBottomNavigationBar(
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,

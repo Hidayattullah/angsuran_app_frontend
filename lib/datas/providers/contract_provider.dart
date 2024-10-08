@@ -1,18 +1,22 @@
-// lib/data/providers/contract_provider.dart
-
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import '../../core/constants/app_constants.dart';
 import '../models/contract_model.dart';
 
 class ContractProvider {
-  // Fetch all contracts
+   // Fetch all contracts
   Future<List<Contract>> getAllContracts() async {
     final response = await http.get(Uri.parse('${AppConstants.baseUrl}/contracts'));
 
     if (response.statusCode == 200) {
-      List data = json.decode(response.body);
-      return data.map((contract) => Contract.fromJson(contract)).toList();
+      var decodedData = json.decode(response.body);
+
+      // Extract contracts from the JSON object
+      List contracts = decodedData['contracts'];
+
+      // Map the contracts to Contract model
+      return contracts.map((contract) => Contract.fromJson(contract)).toList();
     } else {
       throw Exception('Failed to load contracts');
     }
@@ -25,6 +29,9 @@ class ContractProvider {
     if (response.statusCode == 200) {
       return Contract.fromJson(json.decode(response.body));
     } else {
+      if (kDebugMode) {
+        print('Failed to load contract: ${response.body}');
+      }
       throw Exception('Failed to load contract');
     }
   }
@@ -37,7 +44,7 @@ class ContractProvider {
       body: json.encode({
         'contractNumber': contract.contractNumber,
         'clientName': contract.clientName,
-        'otr': contract.otr, // OTR field
+        'otr': contract.otr,
         'downPayment': contract.downPayment,
         'principalDebt': contract.principalDebt,
         'interestRate': contract.interestRate,

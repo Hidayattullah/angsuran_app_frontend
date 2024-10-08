@@ -35,17 +35,24 @@ class _InstallmentPageState extends State<InstallmentPage> {
       appBar: AppBar(
         title: const Text('Installments'),
       ),
-      body: Obx(() {
-        if (installmentController.isLoading.value) {
-          return const Center(child: CircularProgressIndicator());
-        }
+      body: FutureBuilder(
+        future: installmentController.fetchInstallments(), // Method to fetch data
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
 
-        if (installmentController.installments.isEmpty) {
-          return const Center(child: Text('No installments available'));
-        }
+          if (snapshot.hasError) {
+            return const Center(child: Text('Error fetching installments'));
+          }
 
-        return InstallmentList(installments: installmentController.installments);
-      }),
+          if (installmentController.installments.isEmpty) {
+            return const Center(child: Text('No installments available'));
+          }
+
+          return InstallmentList(installments: installmentController.installments);
+        },
+      ),
       bottomNavigationBar: CustomBottomNavigationBar(
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,

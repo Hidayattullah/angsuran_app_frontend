@@ -11,17 +11,18 @@ class ContractCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final NumberFormat currencyFormatter = NumberFormat.simpleCurrency();
     final DateFormat dateFormatter = DateFormat('dd-MM-yyyy');
+    final screenWidth = MediaQuery.of(context).size.width;
 
     return Card(
-      margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+      margin: EdgeInsets.symmetric(vertical: 10, horizontal: screenWidth * 0.04),
       child: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: EdgeInsets.all(screenWidth * 0.04), // Responsive padding
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
               'Contract Number: ${contract.contractNumber}',
-              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: screenWidth * 0.045),
             ),
             const SizedBox(height: 8),
             Text('Client: ${contract.clientName}'),
@@ -33,6 +34,10 @@ class ContractCard extends StatelessWidget {
             Text('Start Date: ${dateFormatter.format(contract.startDate)}'),
             const SizedBox(height: 8),
             Text('End Date: ${dateFormatter.format(contract.endDate)}'),
+            const SizedBox(height: 8),
+            Text('Monthly Installment: ${currencyFormatter.format(contract.monthlyInstallment)}'),
+            const SizedBox(height: 8),
+            Text('Duration: ${contract.durationInMonths} months'),
           ],
         ),
       ),

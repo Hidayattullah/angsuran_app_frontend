@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import '../../core/constants/app_constants.dart';
@@ -6,17 +7,46 @@ import '../models/penalty_model.dart';
 class PenaltyProvider {
   // Get all penalties
   Future<List<Penalty>> getAllPenalties() async {
+  try {
     final response = await http.get(
-      Uri.parse('${AppConstants.baseUrl}${AppConstants.penaltiesEndpoint}')
+      Uri.parse('${AppConstants.baseUrl}${AppConstants.penaltiesEndpoint}'),
     );
 
+    if (kDebugMode) {
+      print('Response status: ${response.statusCode}');
+    }
+    if (kDebugMode) {
+      print('Response body: ${response.body}');
+    } // Log the full response body
+
     if (response.statusCode == 200) {
-      List data = json.decode(response.body);
-      return data.map((penalty) => Penalty.fromJson(penalty)).toList();
+      final data = json.decode(response.body);
+
+      // Ensure the response contains the penalties key
+      if (data is Map && data['penalties'] is List) {
+        return (data['penalties'] as List)
+            .map((penalty) => Penalty.fromJson(penalty))
+            .toList();
+      } else {
+        if (kDebugMode) {
+          print('Unexpected response structure: $data');
+        }
+        throw Exception('Expected a list of penalties but received an unexpected structure');
+      }
     } else {
+      if (kDebugMode) {
+        print('Error: ${response.statusCode} - ${response.body}');
+      } // Log error details
       throw Exception('Failed to load penalties');
     }
+  } catch (e) {
+    if (kDebugMode) {
+      print('Error fetching penalties: $e');
+    } // Log any exception that occurs
+    throw Exception('Failed to load penalties');
   }
+}
+
 
   // Get a specific penalty by ID
   Future<Penalty> getPenaltyById(int id) async {

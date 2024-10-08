@@ -22,22 +22,28 @@ class InstallmentController extends GetxController {
   }
 
   Future<void> fetchInstallments() async {
+    isLoading(true); // Start loading
     try {
-      isLoading(true);
       final result = await getInstallmentsUseCase();
       installments.assignAll(result);
+    } catch (e) {
+      // Handle error
+      Get.snackbar('Error', 'Failed to load installments');
     } finally {
-      isLoading(false);
+      isLoading(false); // Stop loading
     }
   }
 
   Future<void> fetchInstallmentById(int id) async {
+    isLoading(true); // Start loading
     try {
-      isLoading(true);
       final result = await getInstallmentByIdUseCase(id);
       selectedInstallment.value = result;
+    } catch (e) {
+      // Handle error
+      Get.snackbar('Error', 'Failed to load installment');
     } finally {
-      isLoading(false);
+      isLoading(false); // Stop loading
     }
   }
 }

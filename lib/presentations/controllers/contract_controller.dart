@@ -1,7 +1,7 @@
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import '../../datas/models/contract_model.dart';
 import '../../domain/usescases/contract/get_contract.dart';
-
 
 class ContractController extends GetxController {
   final GetContracts _getContracts;
@@ -20,15 +20,24 @@ class ContractController extends GetxController {
 
   // Function to fetch contracts from the use case
   Future<void> fetchContracts() async {
+    isLoading(true); // Start loading
     try {
-      isLoading(true);
       final contractList = await _getContracts.call();
+      if (kDebugMode) {
+        print('Fetched Contracts: ${contractList.length}');
+      } // Log the number of fetched contracts
       contracts.assignAll(contractList); // Assign fetched contracts to the observable list
+      if (kDebugMode) {
+        print('Contracts: $contracts');
+      } // Log the contracts data
     } catch (e) {
       // Handle error
+      if (kDebugMode) {
+        print('Error fetching contracts: $e');
+      } // Log the error
       Get.snackbar('Error', 'Failed to load contracts');
     } finally {
-      isLoading(false);
+      isLoading(false); // Stop loading
     }
   }
 }

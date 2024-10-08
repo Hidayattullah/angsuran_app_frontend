@@ -6,33 +6,38 @@ class Penalty {
   final int id;
   final double penaltyAmount;
   final String penaltyReason;
-  final Installment? installment; // Bisa nullable karena mungkin installment null pada update
-  final DateTime? penaltyDate; // Tambahkan untuk menyimpan tanggal penalti
-  final DateTime? createdAt; // Untuk menyimpan tanggal dibuat
-  final DateTime? updatedAt; // Untuk menyimpan tanggal diperbarui
+  final Installment? installment; // Nullable
+  final DateTime? penaltyDate; // Nullable
+  final DateTime? createdAt; // Nullable
+  final DateTime? updatedAt; // Nullable
 
   Penalty({
     required this.id,
     required this.penaltyAmount,
     required this.penaltyReason,
-    this.installment, // installment bisa null
-    this.penaltyDate, // Tanggal penalti bisa null
-    this.createdAt, // Tanggal dibuat bisa null
-    this.updatedAt, // Tanggal diperbarui bisa null
+    this.installment,
+    this.penaltyDate,
+    this.createdAt,
+    this.updatedAt,
   });
 
   // Factory method to parse JSON data
   factory Penalty.fromJson(Map<String, dynamic> json) {
     return Penalty(
       id: json['id'],
-      penaltyAmount: json['penaltyAmount'],
-      penaltyReason: json['penaltyReason'],
-      // Handling nullable installment
+      penaltyAmount: _parseDouble(json['penaltyAmount']),
+      penaltyReason: json['penaltyReason'] ?? '', // Default to empty string if null
       installment: json['installment'] != null ? Installment.fromJson(json['installment']) : null,
       penaltyDate: json['penaltyDate'] != null ? DateTime.parse(json['penaltyDate']) : null,
       createdAt: json['createdAt'] != null ? DateTime.parse(json['createdAt']) : null,
       updatedAt: json['updatedAt'] != null ? DateTime.parse(json['updatedAt']) : null,
     );
+  }
+
+  static double _parseDouble(dynamic value) {
+    if (value == null) return 0.0; // Return 0.0 if value is null
+    if (value is String) return double.tryParse(value) ?? 0.0; // Try to parse string to double
+    return value.toDouble(); // If already double, return it
   }
 
   // Method to convert Penalty object to JSON
