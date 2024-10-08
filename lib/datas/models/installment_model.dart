@@ -1,28 +1,42 @@
 // lib/data/models/installment_model.dart
 
+import 'contract_model.dart';
+
 class Installment {
   final int id;
   final int installmentNo;
   final double amountPerMonth;
+  final double interestRate;
+  final double principalAmount;
   final DateTime dueDate;
-  final dynamic contract; // Bisa nullable atau jenis lain (ubah sesuai kontrak)
+  final String status;
+  final bool isPaidOff;
+  final Contract? contract; 
 
   Installment({
     required this.id,
     required this.installmentNo,
     required this.amountPerMonth,
+    required this.interestRate,
+    required this.principalAmount,
     required this.dueDate,
-    this.contract, 
+    required this.status,
+    required this.isPaidOff,
+    this.contract,
   });
 
-  // Factory method to parse JSON data
+  // Factory method untuk parsing JSON
   factory Installment.fromJson(Map<String, dynamic> json) {
     return Installment(
       id: json['id'],
       installmentNo: json['installmentNo'],
-      amountPerMonth: json['amountPerMonth'],
+      amountPerMonth: json['amountPerMonth'].toDouble(),
+      interestRate: json['interestRate'].toDouble(),
+      principalAmount: json['principalAmount'].toDouble(),
       dueDate: DateTime.parse(json['dueDate']),
-      contract: json['contract'], 
+      status: json['status'],
+      isPaidOff: json['isPaidOff'],
+      contract: json['contract'] != null ? Contract.fromJson(json['contract']) : null,
     );
   }
 }

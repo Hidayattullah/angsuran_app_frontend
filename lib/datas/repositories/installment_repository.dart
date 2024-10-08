@@ -14,13 +14,17 @@ class InstallmentRepository {
     return _installmentProvider.getInstallmentById(id);
   }
 
-  // Tambahkan fungsi create installment
+  // Fungsi untuk membuat installment
   Future<Installment> createInstallment(Installment installment) {
     return _installmentProvider.createInstallment(installment);
   }
 
-  // Tambahkan fungsi update installment
+  // Fungsi untuk memperbarui installment
   Future<Installment> updateInstallment(int id, Installment installment) {
     return _installmentProvider.updateInstallment(id, installment);
   }
+
+  Future<void> deleteInstallment(int id) {
+  return _installmentProvider.deleteInstallment(id);
+}
 }

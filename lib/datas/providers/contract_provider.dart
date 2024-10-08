@@ -6,6 +6,7 @@ import '../../core/constants/app_constants.dart';
 import '../models/contract_model.dart';
 
 class ContractProvider {
+  // Fetch all contracts
   Future<List<Contract>> getAllContracts() async {
     final response = await http.get(Uri.parse('${AppConstants.baseUrl}/contracts'));
 
@@ -17,6 +18,7 @@ class ContractProvider {
     }
   }
 
+  // Fetch a contract by ID
   Future<Contract> getContractById(int id) async {
     final response = await http.get(Uri.parse('${AppConstants.baseUrl}/contracts/$id'));
 
@@ -27,6 +29,7 @@ class ContractProvider {
     }
   }
 
+  // Create a new contract
   Future<Contract> createContract(Contract contract) async {
     final response = await http.post(
       Uri.parse('${AppConstants.baseUrl}/contracts'),
@@ -34,8 +37,11 @@ class ContractProvider {
       body: json.encode({
         'contractNumber': contract.contractNumber,
         'clientName': contract.clientName,
-        'otr': contract.contractValue,
+        'otr': contract.otr, // OTR field
         'downPayment': contract.downPayment,
+        'principalDebt': contract.principalDebt,
+        'interestRate': contract.interestRate,
+        'monthlyInstallment': contract.monthlyInstallment,
         'durationInMonths': contract.durationInMonths,
         'startDate': contract.startDate.toIso8601String(),
         'endDate': contract.endDate.toIso8601String(),
@@ -49,6 +55,7 @@ class ContractProvider {
     }
   }
 
+  // Update an existing contract
   Future<Contract> updateContract(int id, Contract contract) async {
     final response = await http.put(
       Uri.parse('${AppConstants.baseUrl}/contracts/$id'),
@@ -56,8 +63,11 @@ class ContractProvider {
       body: json.encode({
         'contractNumber': contract.contractNumber,
         'clientName': contract.clientName,
-        'otr': contract.contractValue,
+        'otr': contract.otr,
         'downPayment': contract.downPayment,
+        'principalDebt': contract.principalDebt,
+        'interestRate': contract.interestRate,
+        'monthlyInstallment': contract.monthlyInstallment,
         'durationInMonths': contract.durationInMonths,
         'startDate': contract.startDate.toIso8601String(),
         'endDate': contract.endDate.toIso8601String(),
@@ -68,6 +78,15 @@ class ContractProvider {
       return Contract.fromJson(json.decode(response.body)['contract']);
     } else {
       throw Exception('Failed to update contract');
+    }
+  }
+
+  // Delete a contract by ID
+  Future<void> deleteContract(int id) async {
+    final response = await http.delete(Uri.parse('${AppConstants.baseUrl}/contracts/$id'));
+
+    if (response.statusCode != 204) {
+      throw Exception('Failed to delete contract');
     }
   }
 }

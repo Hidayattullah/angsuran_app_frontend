@@ -21,13 +21,13 @@ class InstallmentProvider {
     final response = await http.get(Uri.parse('${AppConstants.baseUrl}/installments/$id'));
 
     if (response.statusCode == 200) {
-      return Installment.fromJson(json.decode(response.body));
+      return Installment.fromJson(json.decode(response.body)['installment']);
     } else {
       throw Exception('Failed to load installment');
     }
   }
 
-  // Tambahkan fungsi create installment
+  // Fungsi untuk membuat installment
   Future<Installment> createInstallment(Installment installment) async {
     final response = await http.post(
       Uri.parse('${AppConstants.baseUrl}/installments'),
@@ -35,7 +35,13 @@ class InstallmentProvider {
       body: json.encode({
         'installmentNo': installment.installmentNo,
         'amountPerMonth': installment.amountPerMonth,
+        'interestRate': installment.interestRate,
+        'principalAmount': installment.principalAmount,
         'dueDate': installment.dueDate.toIso8601String(),
+        'status': installment.status,
+        'isPaidOff': installment.isPaidOff,
+        // Jika Anda ingin mengirimkan data kontrak juga, tambahkan di sini
+        // 'contract': installment.contract != null ? installment.contract.toJson() : null,
       }),
     );
 
@@ -46,15 +52,21 @@ class InstallmentProvider {
     }
   }
 
-  // Tambahkan fungsi update installment
+  // Fungsi untuk memperbarui installment
   Future<Installment> updateInstallment(int id, Installment installment) async {
-    final response = await http.patch(
+    final response = await http.put(
       Uri.parse('${AppConstants.baseUrl}/installments/$id'),
       headers: {'Content-Type': 'application/json'},
       body: json.encode({
         'installmentNo': installment.installmentNo,
         'amountPerMonth': installment.amountPerMonth,
+        'interestRate': installment.interestRate,
+        'principalAmount': installment.principalAmount,
         'dueDate': installment.dueDate.toIso8601String(),
+        'status': installment.status,
+        'isPaidOff': installment.isPaidOff,
+        // Jika Anda ingin mengirimkan data kontrak juga, tambahkan di sini
+        // 'contract': installment.contract != null ? installment.contract.toJson() : null,
       }),
     );
 
@@ -62,6 +74,15 @@ class InstallmentProvider {
       return Installment.fromJson(json.decode(response.body)['installment']);
     } else {
       throw Exception('Failed to update installment');
+    }
+  }
+
+  // Fungsi untuk menghapus installment
+  Future<void> deleteInstallment(int id) async {
+    final response = await http.delete(Uri.parse('${AppConstants.baseUrl}/installments/$id'));
+
+    if (response.statusCode != 204) {
+      throw Exception('Failed to delete installment');
     }
   }
 }
