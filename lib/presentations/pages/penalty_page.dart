@@ -3,19 +3,31 @@ import 'package:get/get.dart';
 import '../../datas/repositories/penalty_repository.dart';
 import '../../domain/usescases/penalty/get_penalty.dart';
 import '../controllers/penalty_controller.dart';
+import '../widgets/custom_bottom_navigation.dart';
 import '../widgets/penalty_card.dart';
 
+class PenaltyPage extends StatefulWidget {
+  const PenaltyPage({super.key});
 
-class PenaltyPage extends StatelessWidget {
-  final PenaltyController penaltyController;
+  @override
+  _PenaltyPageState createState() => _PenaltyPageState();
+}
 
-  PenaltyPage({super.key})
-      : penaltyController = Get.put(
-          PenaltyController(
-            GetPenalties(PenaltyRepository()),
-            GetPenaltyById(PenaltyRepository()),
-          ),
-        );
+class _PenaltyPageState extends State<PenaltyPage> {
+  final PenaltyController penaltyController = Get.put(
+    PenaltyController(
+      GetPenalties(PenaltyRepository()),
+      GetPenaltyById(PenaltyRepository()),
+    ),
+  );
+
+  int _selectedIndex = 0;
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,6 +52,10 @@ class PenaltyPage extends StatelessWidget {
           },
         );
       }),
+      bottomNavigationBar: CustomBottomNavigationBar(
+        currentIndex: _selectedIndex,
+        onTap: _onItemTapped,
+      ),
     );
   }
 }

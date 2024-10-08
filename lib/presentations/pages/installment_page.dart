@@ -3,19 +3,31 @@ import 'package:get/get.dart';
 import '../../datas/repositories/installment_repository.dart';
 import '../../domain/usescases/installment/get_installment.dart';
 import '../controllers/installment_controller.dart';
+import '../widgets/custom_bottom_navigation.dart';
 import '../widgets/installment_list.dart';
 
+class InstallmentPage extends StatefulWidget {
+  const InstallmentPage({super.key});
 
-class InstallmentPage extends StatelessWidget {
-  final InstallmentController installmentController;
+  @override
+  _InstallmentPageState createState() => _InstallmentPageState();
+}
 
-  InstallmentPage({super.key})
-      : installmentController = Get.put(
-          InstallmentController(
-            GetInstallments(InstallmentRepository()),
-            GetInstallmentById(InstallmentRepository()),
-          ),
-        );
+class _InstallmentPageState extends State<InstallmentPage> {
+  final InstallmentController installmentController = Get.put(
+    InstallmentController(
+      GetInstallments(InstallmentRepository()),
+      GetInstallmentById(InstallmentRepository()),
+    ),
+  );
+
+  int _selectedIndex = 0;
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,6 +46,10 @@ class InstallmentPage extends StatelessWidget {
 
         return InstallmentList(installments: installmentController.installments);
       }),
+      bottomNavigationBar: CustomBottomNavigationBar(
+        currentIndex: _selectedIndex,
+        onTap: _onItemTapped,
+      ),
     );
   }
 }
